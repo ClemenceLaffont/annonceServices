@@ -1,0 +1,13 @@
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form section {
+    display: flex;
+}
+
+.part_form {
+    flex-direction: column;
+}
