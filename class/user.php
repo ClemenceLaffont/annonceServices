@@ -1,19 +1,19 @@
 <?php
 class User {
-    private $pseudo;
-    private $password;
-    private $firstname;
-    private $lastname;
-    private $mail;
-    private $phone;
-    private $registerdate;
-    private $town;
-    private $birth;
-    private $adress;
-    private $diplome;
-    private $descript;
-    private $image;
-    private $statut;
+    protected $pseudo;
+    protected $password;
+    protected $firstname;
+    protected $lastname;
+    protected $mail;
+    protected $phone;
+    protected $registerdate;
+    protected $town;
+    protected $birth;
+    protected $adress;
+    protected $diplome;
+    protected $descript;
+    protected $image;
+    protected $statut;
     
     public function __construct($pseudo, $password, $firstname, $lastname, $mail, $phone, $registerdate, $town, $birth = null, $adress = null, $diplome = null, $descript = "Cette personne n'a pas encore écrit de présentation.", $image = null, $statut = "user") {
     $this->pseudo = $pseudo;
@@ -54,6 +54,10 @@ class User {
 
     public function set_statut($statut) {
         $this->statut = $statut;
+    }
+
+    public function get_pseudo() {
+        return $this->pseudo;
     }
 
     public function stock() {

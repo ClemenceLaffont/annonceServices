@@ -14,6 +14,11 @@
 </head>
 
 <body>
+<?php
+    session_start(); 
+    var_dump($_SESSION['erreur']);
+
+?>
     <fieldset>
         <legend>Inscription</legend>
         <form method="POST" action="control.php">
@@ -51,7 +56,6 @@
                         Code Postal*
                     </label>
                     <input type="number" id="postal" name="postal" />
-                
                     <label for="ville">
                         Ville*
                     </label>
@@ -67,7 +71,24 @@
                 <label for="condition">
                     J'accèpte les conditions utilisateurs.*
                 </label>
-                <input type="submit" name="submit" value="Envoyer" />
+                <input type="submit" name="inscription" value="Envoyer" />
+            </section>
+        </form>
+    </fieldset>
+
+    <fieldset>
+        <legend>Connexion</legend>
+        <form method="POST" action="control.php">
+            <section class="part_form">
+                <label for="conect_pseudo">
+                    Pseudo*
+                </label>
+                <input type="text" id="conect_pseudo" name="conect_pseudo" placeholder="Exemple42" />
+                <label for="conect_mdp">
+                    Mot de passe*
+                </label>
+                <input type="password" id="conect_mdp" name="conect_mdp" />
+                <input type="submit" name="connexion" value="Connexion" />
             </section>
         </form>
     </fieldset>
