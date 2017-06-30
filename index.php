@@ -1,97 +1,137 @@
-<!DOCTYPE html>
-<html lang="fr">
+<?php include_once('header.php'); ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="title" content="AnnonceService" />
-    <meta name="description" content="Site de partage et d'annonce de service et petit boulot. Apprentissage plus poussé de la programmation orienté objet en PHP. Projet individuel initialisé en groupe de 5 (avec Hayet Habet, Justin Courdesse, Marlene Egraz et Audrey Gilloud)." />
-    <meta name="autor" content="Clémence Laffont" />
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <script type="text/javascript" src="js/js.js"></script>
-    <title>AnnonceService</title>
-</head>
 
-<body>
-<?php
-    session_start(); 
-    var_dump($_SESSION['erreur']);
-
-?>
-    <fieldset>
-        <legend>Inscription</legend>
+<main>
+    <?php
+    if(isset($_SESSION['user_connecter']) && $_SESSION['user_connecter'] != null) {
+    ?>
         <form method="POST" action="control.php">
-            <section>
-                <section class="part_form">
-                    <label for="pseudo">
-                        Pseudo*
-                    </label>
-                    <input type="text" id="pseudo" name="pseudo" placeholder="Exemple42" />
-                    <label for="mdp">
-                        Mot de passe*
-                    </label>
-                    <input type="password" id="mdp" name="mdp" />
-                    <label for="confirme">
-                        Confirmation du mot de passe*
-                    </label>
-                    <input type="password" id="confirme" name="confirme" />
-                </section>
-                <section class="part_form">
-                    <label for="nom">
-                        Nom*
-                    </label>
-                    <input type="text" id="nom" name="nom" placeholder="Nom" />
-                    <label for="prenom">
-                        Prénom*
-                    </label>
-                    <input type="text" id="prenom" name="prenom" />
-                    <label for="mail">
-                        Email*
-                    </label>
-                    <input type="email" id="mail" name="mail" />
-                </section>
-                <section class="part_form">
-                    <label for="postal">
-                        Code Postal*
-                    </label>
-                    <input type="number" id="postal" name="postal" />
-                    <label for="ville">
-                        Ville*
-                    </label>
-                    <input type="text" id="ville" name="ville" />
-                    <label for="num">
-                        Numéro de téléphone*
-                    </label>
-                    <input type="number" id="num" name="num" />
-                </section>
-            </section>
-            <section>
-                <input type="checkbox" id="condition" name="condition" />
-                <label for="condition">
-                    J'accèpte les conditions utilisateurs.*
-                </label>
-                <input type="submit" name="inscription" value="Envoyer" />
-            </section>
+            <input type="submit" name="deconnection" value="Deconnexion" />
         </form>
-    </fieldset>
-
+        <a href="profile.php">Profil</a>
+    <?php
+    } else {
+    ?>
+    <a href="register.php">Inscription</a> 
     <fieldset>
         <legend>Connexion</legend>
+        <?php
+        if(isset($_SESSION['error']) && $_SESSION['error'] != null) {
+            echo "<p>".$_SESSION['error']."</p>";
+            $_SESSION['error'] = null;
+        }
+        ?>
         <form method="POST" action="control.php">
             <section class="part_form">
                 <label for="conect_pseudo">
                     Pseudo*
                 </label>
-                <input type="text" id="conect_pseudo" name="conect_pseudo" placeholder="Exemple42" />
-                <label for="conect_mdp">
+                <input type="text" id="conect_pseudo" name="conect_pseudo" />
+                <label for="conect_password">
                     Mot de passe*
                 </label>
-                <input type="password" id="conect_mdp" name="conect_mdp" />
-                <input type="submit" name="connexion" value="Connexion" />
+                <input type="password" id="conect_password" name="conect_password" />
+                <input type="submit" name="connection" value="Connexion" />
             </section>
         </form>
     </fieldset>
+    <?php
+    }
+    ?>
+    <form method="POST" action="control.php">
+        <label for="keyword">Recherche : </label>
+        <input type="text" name="keyword" id="keyword" />
+        <label for="tag">Tag : </label>
+        <label for="aide">
+            <input type="radio" name="tag" id="aide" value="aide" />
+            aide
+        </label>
+        <label for="enfant">
+            <input type="radio" name="tag" id="enfant" value="enfant" />
+            enfant
+        </label>
+        <label for="menage">
+            <input type="radio" name="tag" id="menage" value="menage" />
+            menage
+        </label>
+        <label for="animaux">
+            <input type="radio" name="tag" id="animaux" value="animaux" />
+            animaux
+        </label>
+        <label for="cours">
+            <input type="radio" name="tag" id="cours" value="cours" />
+            cours
+        </label>
+        <label for="reparation">
+            <input type="radio" name="tag" id="reparation" value="reparation" />
+            reparation
+        </label>
+        <label for="cuisine">
+            <input type="radio" name="tag" id="cuisine" value="cuisine" />
+            cuisine
+        </label>
+        <label for="fete">
+            <input type="radio" name="tag" id="fete" value="fete" />
+            fete
+        </label>
+        <label for="vente">
+            <input type="radio" name="tag" id="vente" value="vente" />
+            vente
+        </label>
+        <input type="submit" name="search" value="Rechercher"/>
+    </form>
+    <?php
+    $bdd = new Bdd();
+    if(isset($_SESSION['search'])) {
+        echo "c'est pas normal";
+    } else {
+        $announces = scandir('announce/'); 
+        foreach($announces as $file_name) {
+	    if($file_name[0] != '.' && !is_dir("announce/".$file_name)) {
+		$bdd->open_announce_file(pathinfo($file_name, PATHINFO_FILENAME));
+                $bdd->open_user_file($bdd->announce->get_user());
+	?>
+                <article>
+                    <section>
+                        <h2><?php echo $bdd->user->get_pseudo(); ?></h2>
+                        <section>
+                            <?php
+                            if(isset($_SESSION['user_connecter']) && $_SESSION['user_connecter'] != null && $bdd->user->get_pseudo() == $_SESSION['user_connecter']) {
+                            ?>
+                                <form action="controle.php" method="POST">
+                                    <input type="hidden" value="<?php echo $bdd->announce->get_file_name(); ?>" name="titre"/>
+                                    <input type="submit" name="delet" value="supprimer" />
+                                </form>
+                                <form action="create.php" method="POST">
+                                    <input type="hidden" value="<?php echo $bdd->announce->get_file_name(); ?>" name="titre"/>
+                                    <input type="submit" name="modif" value="modifier" />
+                                </form>
+                            <?php } ?>
+                        </section>
+                    </section>
+                    <section>
+                        <h1><?php echo $bdd->announce->get_title(); ?></h1>
+                        <h4>
+                            <?php 
+                                foreach ($bdd->announce->get_tag() as $tag) {
+                                    echo $tag." ";
+                                }
+                            ?>
+                        </h4>
+                        <p><?php echo $bdd->announce->get_descript(); ?></p>
+                        <img>
+                    </section>
+                </article>
+    <?php
+            }
+    
+        }
+    
+    }
+    
+    ?>
+    
+</main>
 </body>
 
 </html>
