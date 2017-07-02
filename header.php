@@ -21,4 +21,47 @@ include_once("class/bdd.php");
 
 <body>
     <header>
+        <?php
+            if(isset($_SESSION['user_connecter']) && $_SESSION['user_connecter'] != null) {
+        ?>
+        <nav>
+            <a href="index.php">Accueil</a>
+            <a href="profile.php">Profil</a>
+            <a href="newannounce.php">Poster une nouvelle annonce</a>
+        </nav>
+        <form method="POST" action="control.php">
+            <input type="submit" name="deconnection" value="Deconnexion" />
+        </form>
+        <?php
+            } else {
+        ?>
+        <nav>
+            <a href="index.php">Accueil</a>
+            <a href="register.php">Inscription</a> 
+        </nav>
+        <fieldset>
+            <legend>Connexion</legend>
+            <?php
+            if(isset($_SESSION['error']) && $_SESSION['error'] != null) {
+                echo "<p>".$_SESSION['error']."</p>";
+                $_SESSION['error'] = null;
+            }
+            ?>
+            <form method="POST" action="control.php">
+                <section class="part_form">
+                    <label for="conect_pseudo">
+                        Pseudo*
+                    </label>
+                    <input type="text" id="conect_pseudo" name="conect_pseudo" />
+                    <label for="conect_password">
+                        Mot de passe*
+                    </label>
+                    <input type="password" id="conect_password" name="conect_password" />
+                    <input type="submit" name="connection" value="Connexion" />
+                </section>
+            </form>
+        </fieldset>
+    <?php
+    }
+    ?>
     </header>

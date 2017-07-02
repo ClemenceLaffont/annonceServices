@@ -2,42 +2,6 @@
 
 
 <main>
-    <?php
-    if(isset($_SESSION['user_connecter']) && $_SESSION['user_connecter'] != null) {
-    ?>
-        <form method="POST" action="control.php">
-            <input type="submit" name="deconnection" value="Deconnexion" />
-        </form>
-        <a href="profile.php">Profil</a>
-    <?php
-    } else {
-    ?>
-    <a href="register.php">Inscription</a> 
-    <fieldset>
-        <legend>Connexion</legend>
-        <?php
-        if(isset($_SESSION['error']) && $_SESSION['error'] != null) {
-            echo "<p>".$_SESSION['error']."</p>";
-            $_SESSION['error'] = null;
-        }
-        ?>
-        <form method="POST" action="control.php">
-            <section class="part_form">
-                <label for="conect_pseudo">
-                    Pseudo*
-                </label>
-                <input type="text" id="conect_pseudo" name="conect_pseudo" />
-                <label for="conect_password">
-                    Mot de passe*
-                </label>
-                <input type="password" id="conect_password" name="conect_password" />
-                <input type="submit" name="connection" value="Connexion" />
-            </section>
-        </form>
-    </fieldset>
-    <?php
-    }
-    ?>
     <form method="POST" action="control.php">
         <label for="keyword">Recherche : </label>
         <input type="text" name="keyword" id="keyword" />
@@ -87,48 +51,50 @@
     } else {
         $announces = scandir('announce/'); 
         foreach($announces as $file_name) {
-	    if($file_name[0] != '.' && !is_dir("announce/".$file_name)) {
-		$bdd->open_announce_file(pathinfo($file_name, PATHINFO_FILENAME));
+            if($file_name[0] != '.' && !is_dir("announce/".$file_name)) {
+                $bdd->open_announce_file(pathinfo($file_name, PATHINFO_FILENAME));
                 $bdd->open_user_file($bdd->announce->get_user());
-	?>
-                <article>
-                    <section>
-                        <h2><?php echo $bdd->user->get_pseudo(); ?></h2>
-                        <section>
-                            <?php
-                            if(isset($_SESSION['user_connecter']) && $_SESSION['user_connecter'] != null && $bdd->user->get_pseudo() == $_SESSION['user_connecter']) {
-                            ?>
-                                <form action="controle.php" method="POST">
-                                    <input type="hidden" value="<?php echo $bdd->announce->get_file_name(); ?>" name="titre"/>
-                                    <input type="submit" name="delet" value="supprimer" />
-                                </form>
-                                <form action="create.php" method="POST">
-                                    <input type="hidden" value="<?php echo $bdd->announce->get_file_name(); ?>" name="titre"/>
-                                    <input type="submit" name="modif" value="modifier" />
-                                </form>
-                            <?php } ?>
-                        </section>
-                    </section>
-                    <section>
-                        <h1><?php echo $bdd->announce->get_title(); ?></h1>
-                        <h4>
-                            <?php 
-                                foreach ($bdd->announce->get_tag() as $tag) {
-                                    echo $tag." ";
-                                }
-                            ?>
-                        </h4>
-                        <p><?php echo $bdd->announce->get_descript(); ?></p>
-                        <img>
-                    </section>
-                </article>
+    ?>
+    <article>
+        <section>
+            <h2><?php echo $bdd->user->get_pseudo(); ?></h2>
+            <section>
+    <?php
+                if(isset($_SESSION['user_connecter']) && $_SESSION['user_connecter'] != null && $bdd->user->get_pseudo() == $_SESSION['user_connecter']) {
+    ?>
+                <form action="control.php" method="POST">
+                    <input type="hidden" value="<?php echo $bdd->announce->get_file_name(); ?>" name="file_name"/>
+                    <input type="submit" name="remove" value="supprimer" />
+                </form>
+                <form action="modifyannounce.php" method="POST">
+                    <input type="hidden" value="<?php echo $bdd->announce->get_file_name(); ?>" name="file_name"/>
+                    <input type="submit" name="modify" value="modifier" />
+                </form>
+    <?php 
+                } 
+    ?>
+            </section>
+        </section>
+        <section>
+            <h1><?php echo $bdd->announce->get_title(); ?></h1>
+            <h4>
+    <?php 
+                foreach ($bdd->announce->get_tag() as $tag) {
+                    echo $tag." ";
+                }
+    ?>
+            </h4>
+            <p><?php echo $bdd->announce->get_descript(); ?></p>
+            <img>
+        </section>
+    </article>
     <?php
             }
-    
+
         }
-    
+
     }
-    
+
     ?>
     
 </main>

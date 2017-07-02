@@ -204,8 +204,12 @@ if (isset($_POST['newannounce'])){
     $new_bdd->stock_announce();
 }
 
-
-
+if (isset($_POST['remove'])) {
+    $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+    unlink("announce/".$post["file_name"].".txt");
+    //header('Location: index.php');    
+    //exit();
+}
 
 ?>
 </html>

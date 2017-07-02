@@ -1,14 +1,12 @@
 <?php include_once('header.php'); ?>
 
 <main>
-    <a href="index.php">Accueil</a>
-    <a href="profile.php">Profil</a>
-<?php
-    if(isset($_SESSION['error']) && $_SESSION['error'] != null) {
-        echo "<p>".$_SESSION['error']."</p>";
-        $_SESSION['error'] = null;
-    }
-?>
+    <?php
+        if(isset($_SESSION['error']) && $_SESSION['error'] != null) {
+            echo "<p>".$_SESSION['error']."</p>";
+            $_SESSION['error'] = null;
+        }
+    ?>
     <fieldset>
         <legend>Nouvelle annonce</legend>
         <form method="POST" action="control.php">
